@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .answers label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .answers label input {
+            margin-right: 10px;
+        }
+        .answers {
+            margin-left: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #28a745;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .correct-answers {
+            margin-top: 20px;
+            padding: 10px;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Quiz Time</h2>
+        <form id="quizForm">
+            <div class="question">
+                <p>1. What is the capital of Nigeria?</p>
+                <div class="answers">
+                    <label><input type="radio" name="q1" value="Lagos"> Lagos</label>
+                    <label><input type="radio" name="q1" value="Abuja"> Abuja</label>
+                    <label><input type="radio" name="q1" value="Kano"> Kano</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>2. Who is the current president of Nigeria?</p>
+                <div class="answers">
+                    <label><input type="radio" name="q2" value="Bola Ahmed Tinubu"> Bola Ahmed Tinubu</label>
+                    <label><input type="radio" name="q2" value="Muhammadu Buhari"> Muhammadu Buhari</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>3. What is the largest continent by area?</p>
+                <div class="answers">
+                    <label><input type="radio" name="q3" value="Asia"> Asia</label>
+                    <label><input type="radio" name="q3" value="Africa"> Africa</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>4. What year did Nigeria gain independence?</p>
+                <div class="answers">
+                    <label><input type="radio" name="q4" value="1960"> 1960</label>
+                    <label><input type="radio" name="q4" value="1970"> 1970</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>5. What is the chemical symbol for water?</p>
+                <div class="answers">
+                    <label><input type="radio" name="q5" value="H2O"> H2O</label>
+                    <label><input type="radio" name="q5" value="CO2"> CO2</label>
+                </div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="result" id="quizResult"></div>
+        <div class="correct-answers" id="correctAnswers"></div>
+    </div>
+
+    <script>
+        const quizForm = document.getElementById("quizForm");
+        const quizResult = document.getElementById("quizResult");
+        const correctAnswersDiv = document.getElementById("correctAnswers");
+
+        const correctAnswers = {
+            q1: "Abuja",
+            q2: "Bola Ahmed Tinubu",
+            q3: "Asia",
+            q4: "1960",
+            q5: "H2O",
+        };
+
+        quizForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let score = 0;
+            const formData = new FormData(quizForm);
+            const userAnswers = {};
+
+            // Check answers and calculate score
+            for (const [question, answer] of Object.entries(correctAnswers)) {
+                const userAnswer = formData.get(question);
+                userAnswers[question] = userAnswer;
+
+                if (userAnswer === answer) {
+                    score++;
+                }
+            }
+
+            const totalQuestions = Object.keys(correctAnswers).length;
+            quizResult.textContent = `You scored ${score} out of ${totalQuestions}!`;
+
+            // Display correct answers
+            let correctAnswersHtml = "<h3>Correct Answers:</h3><ul>";
+            for (const [question, correctAnswer] of Object.entries(correctAnswers)) {
+                const userAnswer = userAnswers[question];
+                correctAnswersHtml += `
+                    <li>
+                        <strong>Q${question.slice(1)}:</strong> ${correctAnswer}
+                        ${userAnswer === correctAnswer ? "(Correct)" : `(Your Answer: ${userAnswer || "No Answer"})`}
+                    </li>
+                `;
+            }
+            correctAnswersHtml += "</ul>";
+            correctAnswersDiv.innerHTML = correctAnswersHtml;
+        });
+    </script>
+</body>
+</html>
